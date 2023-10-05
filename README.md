@@ -1,10 +1,10 @@
-<img align=right src="main.ico"/>
+<img align=center src="icon.ico" />
 
 ## Enables the loading of custom themes into Roblox Studio.
 ### With less hassle this time
-This is a modified version of https://github.com/rbxrootx/Roblox-Studio-CustomTheme-Patcher
+This is a modified version of `(https://www.github.com/rbxrootx/Roblox-Studio-CustomTheme-Patcher)`
 
-![LCqOvh9Jd6](https://github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/assets/110287364/3254ff46-f9ea-4660-8b14-a4ccda47a65b)
+![LCqOvh9Jd6](https://www.github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/assets/110287364/3254ff46-f9ea-4660-8b14-a4ccda47a65b)
 
 ## Usage
 
@@ -18,6 +18,8 @@ This is a modified version of https://github.com/rbxrootx/Roblox-Studio-CustomTh
 7. If you said yes to creating a shortcut just open the shortcut saved on ur Desktop or if u didnt it should open File Explorer to where `RobloxStudioPatched.exe` is stored, just run that .exe
 
 8. ENJOY UR THEMES!
+
+### If Studio updates just rerun the patching process (repeat steps 6, 7 and 8)
 
 ## False Positives
 
