@@ -7,9 +7,10 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace StudioPatcher2
+namespace StudioPatcher
 {
-    class Program {
+    class Program 
+        {
         [DllImport("msvcrt")] static extern int _getch();
         [DllImport("crtdll.dll")] public static extern int _kbhit();
         

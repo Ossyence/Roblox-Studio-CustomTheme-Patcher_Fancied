@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{906A67E5-5773-4977-861D-7D815B89CAED}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>StudioPatcher2</RootNamespace>
-    <AssemblyName>StudioPatcher2</AssemblyName>
+    <RootNamespace>StudioPatcher</RootNamespace>
+    <AssemblyName>StudioPatcher</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -37,7 +37,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>StudioPatcher2.Program</StartupObject>
+    <StartupObject>StudioPatcher.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
