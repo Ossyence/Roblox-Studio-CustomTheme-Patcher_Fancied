@@ -18,7 +18,7 @@ This is a modified version of `(https://www.github.com/rbxrootx/Roblox-Studio-Cu
 
 8. ENJOY UR THEMES!
 
-###ALL MODIFIED JSONS MUST BE NAMED  `DarkTheme.json` or `LightTheme.json` OTHERWISE IT WILL NOT APPLY
+### ALL MODIFIED JSONS MUST BE NAMED  `DarkTheme.json` or `LightTheme.json` OTHERWISE IT WILL NOT APPLY
 ### If Studio updates just rerun the patching process (repeat steps 6, 7 and 8)
 
 ## False Positives
