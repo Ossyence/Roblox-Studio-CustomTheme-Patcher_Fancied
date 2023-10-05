@@ -1,4 +1,4 @@
-<img align=centre src="icon.ico" />
+<img src="icon.ico" />
 
 ## Enables the loading of custom themes into Roblox Studio.
 ### With less hassle this time
