@@ -9,10 +9,35 @@ using System.Collections.Generic;
 
 namespace StudioPatcher2
 {
-    class Program
-    {
+    class Program {
         [DllImport("msvcrt")] static extern int _getch();
         [DllImport("crtdll.dll")] public static extern int _kbhit();
+        
+        static string resourcesPath = Path.Combine(Environment.CurrentDirectory, "Resources");
+        static string iconPath = Path.Combine(Environment.CurrentDirectory, "icon.ico");
+
+        static void ClearDirectory(string path, bool log) {
+            if (log) Console.WriteLine("Running clear on \"" + path + "\"...");
+            
+            System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(path);
+
+            foreach (System.IO.FileInfo file in directory.GetFiles()) { 
+                if (log == true) {
+                    Console.WriteLine("Deleting file \"" + file.FullName + "\"");
+                }
+
+                file.Delete(); 
+            }
+
+            foreach (System.IO.DirectoryInfo subDirectory in directory.GetDirectories()) {
+                if (log) Console.WriteLine("Deleting directory \"" + subDirectory.FullName + "\"");
+
+                subDirectory.Delete(true);
+            }
+
+            if (log) Console.WriteLine("Finished clear on \"" + path + "\"...");
+        }
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -20,14 +45,29 @@ namespace StudioPatcher2
             {
                 Console.Clear();
                 Console.WriteLine(@"
-            _____ _             _ _         _____      _       _               
-            / ____| |           | (_)       |  __ \    | |     | |              
-            | (___ | |_ _   _  __| |_  ___   | |__) |_ _| |_ ___| |__   ___ _ __ 
-            \___ \| __| | | |/ _` | |/ _ \  |  ___/ _` | __/ __| '_ \ / _ \ '__|
-            ____) | |_| |_| | (_| | | (_) | | |  | (_| | || (__| | | |  __/ |   
-            |_____/ \__|\__,_|\__,_|_|\___/  |_|   \__,_|\__\___|_| |_|\___|_|   
+░██████╗████████╗██╗░░░██╗██████╗░██╗░█████╗░  ██████╗░░█████╗░████████╗░█████╗░██╗░░██╗███████╗██████╗░
+██╔════╝╚══██╔══╝██║░░░██║██╔══██╗██║██╔══██╗  ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██║░░██║██╔════╝██╔══██╗
+╚█████╗░░░░██║░░░██║░░░██║██║░░██║██║██║░░██║  ██████╔╝███████║░░░██║░░░██║░░╚═╝███████║█████╗░░██████╔╝
+░╚═══██╗░░░██║░░░██║░░░██║██║░░██║██║██║░░██║  ██╔═══╝░██╔══██║░░░██║░░░██║░░██╗██╔══██║██╔══╝░░██╔══██╗
+██████╔╝░░░██║░░░╚██████╔╝██████╔╝██║╚█████╔╝  ██║░░░░░██║░░██║░░░██║░░░╚█████╔╝██║░░██║███████╗██║░░██║
+╚═════╝░░░░╚═╝░░░░╚═════╝░╚═════╝░╚═╝░╚════╝░  ╚═╝░░░░░╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
+                      _________________________________________________________
+                     //                 Fancied up by Ossyence ;)             \\
+                    //    To change the studio themes change the json in the   \\
+                   //                      resources folder!                    \\
+                   ---------------------------------------------------------------
+");
 
-            ");
+                if (!Directory.Exists(resourcesPath)) {
+                    Console.WriteLine(@"DOWNLOADING RESOURCES AS THEY DONT EXIST...
+                    ");
+
+                    GetLatestResourceFiles(false);
+                }
+
+                Console.WriteLine(@"
+
+                ");
 
                 Console.WriteLine("Please choose an option:");
                 Console.WriteLine("1. Patch Studio");
@@ -39,11 +79,19 @@ namespace StudioPatcher2
                 switch (choice)
                 {
                     case "1":
-                        PatchStudio();
+                        Console.WriteLine("");
+                        Console.WriteLine("Do you want to create a shortcut on desktop? (Y/N)");
+
+                        string shortcutChoice = Console.ReadLine();
+                        
+                        Console.WriteLine("");
+
+                        PatchStudio(shortcutChoice);
+
                         break;
 
                     case "2":
-                        GetLatestResourceFiles();
+                        GetLatestResourceFiles(true);
                         break;
 
                     case "3":
@@ -58,7 +106,7 @@ namespace StudioPatcher2
             }
         }
 
-        static void PatchStudio()
+        static void PatchStudio(string shortcutChoice)
         {
             Console.WriteLine("Please select RobloxStudioBeta.exe.");
 
@@ -113,8 +161,16 @@ namespace StudioPatcher2
                     Console.WriteLine("Found Bytes and Patched RobloxStudioBeta");
                     Console.WriteLine("Creating Folders");
 
+                    // Get the original path 
+                    string originalFilePath = Path.GetFullPath(item);
+                    string originalDirectory = Path.GetDirectoryName(originalFilePath);
+
                     // Define the folder structure
-                    string folderPath = Path.Combine(Environment.CurrentDirectory, "Platform", "Base", "QtUI", "themes");
+                    string folderPath = Path.Combine(originalDirectory, "Platform", "Base", "QtUI", "themes");
+
+                    if (Directory.Exists(folderPath)) {
+                        ClearDirectory(folderPath, true);
+                    }
 
                     // Create all the directories in the specified path
                     Directory.CreateDirectory(folderPath);
@@ -122,64 +178,87 @@ namespace StudioPatcher2
                     string darkTheme = Path.Combine(folderPath, "DarkTheme.json");
                     string lightTheme = Path.Combine(folderPath, "LightTheme.json");
 
-                    File.WriteAllText(darkTheme, System.IO.File.ReadAllText(Environment.CurrentDirectory + @"\Resources\DarkTheme.json"));
-                    File.WriteAllText(lightTheme, System.IO.File.ReadAllText(Environment.CurrentDirectory + @"\Resources\LightTheme.json"));
-
-                    // Move Platform folder to the same directory as the patched file
-                    string platformPath = Path.Combine(Environment.CurrentDirectory, "Platform");
-                    string platformDestination = Path.Combine(Path.GetDirectoryName(item), "Platform");
-
-                    if (Directory.Exists(platformDestination))
-                    {
-                        Directory.Delete(platformDestination, true);
-                    }
-                    Directory.Move(platformPath, platformDestination);
-
-                    // Get the original path 
-                    string originalFilePath = Path.GetFullPath(item);
-                    string originalDirectory = Path.GetDirectoryName(originalFilePath);
+                    File.WriteAllText(darkTheme, System.IO.File.ReadAllText(resourcesPath + @"\DarkTheme.json"));
+                    File.WriteAllText(lightTheme, System.IO.File.ReadAllText(resourcesPath + @"\LightTheme.json"));
 
                     // Save the patched file to the original path
                     string patchedFilePath = Path.Combine(originalDirectory, "RobloxStudioPatched.exe");
                     File.WriteAllBytes(patchedFilePath, byt);
                     Console.WriteLine("File has been saved to " + originalDirectory);
 
-                    // Open file explorer with patched file selected and close console
-                    System.Diagnostics.Process.Start("explorer.exe", "/select, \"" + patchedFilePath + "\"");
+                    string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Roblox Studio Patched.lnk");
+                    
+                    if (File.Exists(shortcutPath)) {
+                        File.Delete(shortcutPath);
+                    }
+
+                    if (shortcutChoice == "y" || shortcutChoice == "Y") {
+                        Console.WriteLine("Creating shortcut on desktop...");
+
+                        Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
+                        dynamic shell = Activator.CreateInstance(t);
+                        try {
+                            var lnk = shell.CreateShortcut(shortcutPath);
+                            try {
+                                lnk.TargetPath = patchedFilePath;
+                                lnk.IconLocation = iconPath;
+                                lnk.Save();
+                            }
+                            finally {
+                                Marshal.FinalReleaseComObject(lnk);
+                            }
+                        }
+                        finally {
+                            Marshal.FinalReleaseComObject(shell);
+                        }
+
+                        Console.WriteLine("Shortcut created.");
+                    } else {
+                        System.Diagnostics.Process.Start("explorer.exe", "/select, \"" + patchedFilePath + "\"");
+
+                        Console.WriteLine("Opening explorer to path...");
+                    }
                 }
                 else
                 {
                     Console.WriteLine("Incorrect App Specified");
                 }
             }
-            Console.WriteLine("Press any key to end...");
+            Console.WriteLine(@"
+All operations complete! Press any key to end...");
             Console.Read();
         }
 
-        static void GetLatestResourceFiles()
+        static void GetLatestResourceFiles(bool returnAfter)
         {
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Platform", "Base", "QtUI", "themes");
-
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
+            if (!Directory.Exists(resourcesPath)) {
+                Directory.CreateDirectory(resourcesPath);
             }
+
+            ClearDirectory(resourcesPath, true);
+            
+            Console.WriteLine("");
 
             using (WebClient client = new WebClient())
             {
+                Console.WriteLine("Downloading resources...");
+
                 string darkThemeURL = "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/QtResources/Platform/Base/QtUI/themes/DarkTheme.json";
                 string lightThemeURL = "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/QtResources/Platform/Base/QtUI/themes/LightTheme.json";
 
-                string darkThemeFilePath = Path.Combine(folderPath, "DarkTheme.json");
-                string lightThemeFilePath = Path.Combine(folderPath, "LightTheme.json");
+                string darkThemeFilePath = Path.Combine(resourcesPath, "DarkTheme.json");
+                string lightThemeFilePath = Path.Combine(resourcesPath, "LightTheme.json");
 
                 client.DownloadFile(new Uri(darkThemeURL), darkThemeFilePath);
                 client.DownloadFile(new Uri(lightThemeURL), lightThemeFilePath);
             }
 
-            Console.WriteLine("Latest resource files downloaded successfully!", folderPath);
-            Console.WriteLine("Press any key to return to the main menu...");
-            Console.ReadKey();
+            Console.WriteLine("Latest resource files downloaded successfully!");
+
+            if (returnAfter) {
+                Console.WriteLine("Press any key to return to the main menu...");
+                Console.ReadKey();
+            }
         }
     }
 }
