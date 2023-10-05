@@ -15,7 +15,7 @@ This is a modified version of `(https://www.github.com/rbxrootx/Roblox-Studio-Cu
 5. Go into the `Resources` directory and modify the themes to your liking!
   ##ALL MODIFIED JSONS MUST BE NAMED  `DarkTheme.json` or `LightTheme.json` OTHERWISE IT WILL NOT APPLY
 6. Run `StudioPatcher.exe` and type `1`, say if u want a shortcut made, and then wait until you get the confirmation and close the program
-7. If you said yes to creating a shortcut just open the shortcut saved on ur Desktop or if u didnt it should open File Explorer to where `RobloxStudioPatched.exe` is stored, just run that .exe
+7. If u said yes to creating a shortcut just open the shortcut saved on ur Desktop or if u didnt it should open File Explorer to where `RobloxStudioPatched.exe` is stored, just run that .exe
 
 8. ENJOY UR THEMES!
 
