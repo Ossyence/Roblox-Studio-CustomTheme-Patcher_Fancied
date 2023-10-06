@@ -6,6 +6,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Win32;
+using System.Text;
 
 namespace StudioPatcher
 {
@@ -16,12 +18,32 @@ namespace StudioPatcher
         
         static string resourcesPath = Path.Combine(Environment.CurrentDirectory, "Resources");
         static string iconPath = Path.Combine(Environment.CurrentDirectory, "icon.ico");
+        static string shortcutName = "Roblox Studio Patched";
+
+        static void CreateShortcut(string name, string createAt, string executablePath, string iconPath) {
+            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
+            dynamic shell = Activator.CreateInstance(t);
+            try {
+                var lnk = shell.CreateShortcut(Path.Combine(createAt, name + ".lnk"));
+                try {
+                    lnk.TargetPath = executablePath;
+                    lnk.IconLocation = iconPath;
+                    lnk.Save();
+                }
+                finally {
+                    Marshal.FinalReleaseComObject(lnk);
+                }
+            }
+            finally {
+                Marshal.FinalReleaseComObject(shell);
+            }
+        }
 
         static void ClearDirectory(string path, bool log) {
             if (log) Console.WriteLine("Running clear on \"" + path + "\"...");
             
             System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(path);
-
+            
             foreach (System.IO.FileInfo file in directory.GetFiles()) { 
                 if (log == true) {
                     Console.WriteLine("Deleting file \"" + file.FullName + "\"");
@@ -84,7 +106,7 @@ namespace StudioPatcher
                         Console.WriteLine("Do you want to create a shortcut on desktop? (Y/N)");
 
                         string shortcutChoice = Console.ReadLine();
-                        
+                       
                         Console.WriteLine("");
 
                         PatchStudio(shortcutChoice);
@@ -187,7 +209,8 @@ namespace StudioPatcher
                     File.WriteAllBytes(patchedFilePath, byt);
                     Console.WriteLine("File has been saved to " + originalDirectory);
 
-                    string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Roblox Studio Patched.lnk");
+                    string desktopDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    string shortcutPath = Path.Combine(desktopDirectory, shortcutName);
                     
                     if (File.Exists(shortcutPath)) {
                         File.Delete(shortcutPath);
@@ -196,22 +219,7 @@ namespace StudioPatcher
                     if (shortcutChoice == "y" || shortcutChoice == "Y") {
                         Console.WriteLine("Creating shortcut on desktop...");
 
-                        Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
-                        dynamic shell = Activator.CreateInstance(t);
-                        try {
-                            var lnk = shell.CreateShortcut(shortcutPath);
-                            try {
-                                lnk.TargetPath = patchedFilePath;
-                                lnk.IconLocation = iconPath;
-                                lnk.Save();
-                            }
-                            finally {
-                                Marshal.FinalReleaseComObject(lnk);
-                            }
-                        }
-                        finally {
-                            Marshal.FinalReleaseComObject(shell);
-                        }
+                        CreateShortcut(shortcutName, desktopDirectory, patchedFilePath, iconPath);
 
                         Console.WriteLine("Shortcut created.");
                     } else {
