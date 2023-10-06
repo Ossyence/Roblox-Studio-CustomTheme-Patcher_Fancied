@@ -21,6 +21,13 @@ This is a modified version of [rbxrootx](https://www.github.com/rbxrootx)s [Stud
 ### ALL MODIFIED JSONS MUST BE NAMED  `DarkTheme.json` or `LightTheme.json` OTHERWISE IT WILL NOT APPLY
 ### If Studio updates just rerun the patching process (repeat steps 6, 7 and 8)
 
+
+## Example Themes
+To import one of these themes just unzip the theme `.zip` and find the `.json` file and import it into the `Resources` folder, remove the `.json` which has the same name beforehand tho
+
+![RobloxStudioPatched_IPLY4JLaFa](https://github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/assets/110287364/1c348c50-d5a1-4c6b-89ff-53c91f348cf6)
+Midnight (modified to be more consistent) you can download [here](https://github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/files/12831297/MidnightTheme.zip)
+
 ## False Positives
 
 Your browser or OS may detect that the compiled binary is a virus. This is due to it patching bytes in the .exe. You can compile the project from the provided source code if you wish.
