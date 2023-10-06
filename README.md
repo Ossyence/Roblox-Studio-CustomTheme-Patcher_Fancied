@@ -4,7 +4,7 @@
 ### With less hassle this time
 This is a modified version of `(https://www.github.com/rbxrootx/Roblox-Studio-CustomTheme-Patcher)`
 
-![LCqOvh9Jd6](https://www.github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/assets/110287364/3254ff46-f9ea-4660-8b14-a4ccda47a65b)
+![StudioPatcher_cQ5wC4pVSE](https://github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/assets/110287364/f8211d4e-ec05-4c2d-b110-6ad3ce20becf)
 
 ## Usage
 
