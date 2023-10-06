@@ -77,7 +77,7 @@ namespace StudioPatcher
 ");
 
                 if (!Directory.Exists(resourcesPath)) {
-                    Console.WriteLine(@"DOWNLOADING RESOURCES AS THEY DONT EXIST...
+                    Console.WriteLine(@"DOWNLOADING DEFAULT RESOURCES AS THEY DONT EXIST...
                     ");
 
                     GetLatestResourceFiles(false);
@@ -147,10 +147,9 @@ namespace StudioPatcher
 
                 if (fileName == "RobloxStudioBeta.exe")
                 {
-                    Console.WriteLine("Loaded RobloxStudioBeta");
-                    Thread.Sleep(1000);
+                    Console.WriteLine(@"
+Loaded RobloxStudioBeta");
                     Console.WriteLine("Looking for bytes..");
-                    Thread.Sleep(1000);
                     byte[] byt = File.ReadAllBytes(item);
                     for (int i = 0; i <= byt.Length - 1; i++)
                     {
@@ -189,11 +188,16 @@ namespace StudioPatcher
                     // Create all the directories in the specified path
                     Directory.CreateDirectory(folderPath);
 
-                    string darkTheme = Path.Combine(folderPath, "DarkTheme.json");
-                    string lightTheme = Path.Combine(folderPath, "LightTheme.json");
+                    //string darkTheme = Path.Combine(folderPath, "DarkTheme.json");
+                    //string lightTheme = Path.Combine(folderPath, "LightTheme.json");
 
-                    File.WriteAllText(darkTheme, System.IO.File.ReadAllText(resourcesPath + @"\DarkTheme.json"));
-                    File.WriteAllText(lightTheme, System.IO.File.ReadAllText(resourcesPath + @"\LightTheme.json"));
+                    //File.WriteAllText(darkTheme, System.IO.File.ReadAllText(resourcesPath + @"\DarkTheme.json"));
+                    //File.WriteAllText(lightTheme, System.IO.File.ReadAllText(resourcesPath + @"\LightTheme.json"));
+
+                    foreach (System.IO.FileInfo themeFile in new System.IO.DirectoryInfo(resourcesPath).GetFiles()) {
+                        System.IO.File.WriteAllText(Path.Combine(folderPath, themeFile.Name), System.IO.File.ReadAllText(themeFile.FullName));
+                        Console.WriteLine("Copying theme file \"" + themeFile.Name + "\" over to \"" + folderPath + "\"");
+                    }
 
                     // Save the patched file to the original path
                     string patchedFilePath = Path.Combine(originalDirectory, patchedExecutableName);
@@ -225,22 +229,30 @@ namespace StudioPatcher
                 }
             }
             Console.WriteLine(@"
-All operations complete! Press any key to end...");
+All operations complete! Press anything to return back...");
             Console.Read();
         }
 
-        static void GetLatestResourceFiles(bool returnAfter)
-        {
+        static void GetLatestResourceFiles(bool providePrompt) {
             if (!Directory.Exists(resourcesPath)) {
                 Directory.CreateDirectory(resourcesPath);
             }
 
+            if (providePrompt) {
+                Console.WriteLine("Running this will cause you to lose any custom themes you have created, are you sure? (Y/N)");
+
+                string prompt = Console.ReadLine();
+
+                if (prompt == "n" || prompt == "N") {
+                    return;
+                }
+            }
+
             ClearDirectory(resourcesPath, true);
-            
+
             Console.WriteLine("");
 
-            using (WebClient client = new WebClient())
-            {
+            using (WebClient client = new WebClient()) {
                 Console.WriteLine("Downloading resources...");
 
                 string darkThemeURL = "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/QtResources/Platform/Base/QtUI/themes/DarkTheme.json";
@@ -256,10 +268,8 @@ All operations complete! Press any key to end...");
             Console.WriteLine(@"Latest resource files downloaded successfully!
 ");
 
-            if (returnAfter) {
-                Console.WriteLine("Press any key to return to the main menu...");
-                Console.ReadKey();
-            }
+            Console.WriteLine(@"Returning you back to main menu...
+");
         }
     }
 }
