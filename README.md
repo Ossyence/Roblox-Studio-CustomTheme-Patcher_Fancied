@@ -2,7 +2,7 @@
 
 ## Enables the loading of custom themes into Roblox Studio.
 ### With less hassle this time
-This is a modified version of `(https://www.github.com/rbxrootx/Roblox-Studio-CustomTheme-Patcher)`
+This is a modified version of [rbxrootx](https://www.github.com/rbxrootx)s [Studio Theme Patcher](https://www.github.com/rbxrootx/Roblox-Studio-CustomTheme-Patcher)
 
 ![StudioPatcher_cQ5wC4pVSE](https://github.com/Ossyence/Roblox-Studio-CustomTheme-Patcher_Fancied/assets/110287364/f8211d4e-ec05-4c2d-b110-6ad3ce20becf)
 
