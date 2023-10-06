@@ -19,15 +19,17 @@ namespace StudioPatcher
         static string resourcesPath = Path.Combine(Environment.CurrentDirectory, "Resources");
         static string iconPath = Path.Combine(Environment.CurrentDirectory, "icon.ico");
         static string shortcutName = "Roblox Studio Patched";
+        static string patchedExecutableName = "RobloxStudioPatched.exe";
 
-        static void CreateShortcut(string name, string createAt, string executablePath, string iconPath) {
+        static void CreateShortcut(string name, string createAt, string executableDirectory, string executableName, string iconPath) {
             Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
             dynamic shell = Activator.CreateInstance(t);
             try {
                 var lnk = shell.CreateShortcut(Path.Combine(createAt, name + ".lnk"));
                 try {
-                    lnk.TargetPath = executablePath;
+                    lnk.TargetPath = Path.Combine(executableDirectory, executableName);
                     lnk.IconLocation = iconPath;
+                    lnk.WorkingDirectory = executableDirectory;
                     lnk.Save();
                 }
                 finally {
@@ -68,17 +70,10 @@ namespace StudioPatcher
             {
                 Console.Clear();
                 Console.WriteLine(@"
-░██████╗████████╗██╗░░░██╗██████╗░██╗░█████╗░  ██████╗░░█████╗░████████╗░█████╗░██╗░░██╗███████╗██████╗░
-██╔════╝╚══██╔══╝██║░░░██║██╔══██╗██║██╔══██╗  ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██║░░██║██╔════╝██╔══██╗
-╚█████╗░░░░██║░░░██║░░░██║██║░░██║██║██║░░██║  ██████╔╝███████║░░░██║░░░██║░░╚═╝███████║█████╗░░██████╔╝
-░╚═══██╗░░░██║░░░██║░░░██║██║░░██║██║██║░░██║  ██╔═══╝░██╔══██║░░░██║░░░██║░░██╗██╔══██║██╔══╝░░██╔══██╗
-██████╔╝░░░██║░░░╚██████╔╝██████╔╝██║╚█████╔╝  ██║░░░░░██║░░██║░░░██║░░░╚█████╔╝██║░░██║███████╗██║░░██║
-╚═════╝░░░░╚═╝░░░░╚═════╝░╚═════╝░╚═╝░╚════╝░  ╚═╝░░░░░╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
-                      _________________________________________________________
-                     //                 Fancied up by Ossyence ;)             \\
-                    //    To change the studio themes change the json in the   \\
-                   //                      resources folder!                    \\
-                   ---------------------------------------------------------------
+░█▀▀▀█ ▀▀█▀▀ ░█─░█ ░█▀▀▄ ▀█▀ ░█▀▀▀█ 　 ░█▀▀█ ─█▀▀█ ▀▀█▀▀ ░█▀▀█ ░█─░█ ░█▀▀▀ ░█▀▀█ 
+─▀▀▀▄▄ ─░█── ░█─░█ ░█─░█ ░█─ ░█──░█ 　 ░█▄▄█ ░█▄▄█ ─░█── ░█─── ░█▀▀█ ░█▀▀▀ ░█▄▄▀ 
+░█▄▄▄█ ─░█── ─▀▄▄▀ ░█▄▄▀ ▄█▄ ░█▄▄▄█ 　 ░█─── ░█─░█ ─░█── ░█▄▄█ ░█─░█ ░█▄▄▄ ░█─░█
+           Modified by Ossyence (@ossyence), Original made by rbxrootx
 ");
 
                 if (!Directory.Exists(resourcesPath)) {
@@ -87,10 +82,6 @@ namespace StudioPatcher
 
                     GetLatestResourceFiles(false);
                 }
-
-                Console.WriteLine(@"
-
-                ");
 
                 Console.WriteLine("Please choose an option:");
                 Console.WriteLine("1. Patch Studio");
@@ -205,7 +196,7 @@ namespace StudioPatcher
                     File.WriteAllText(lightTheme, System.IO.File.ReadAllText(resourcesPath + @"\LightTheme.json"));
 
                     // Save the patched file to the original path
-                    string patchedFilePath = Path.Combine(originalDirectory, "RobloxStudioPatched.exe");
+                    string patchedFilePath = Path.Combine(originalDirectory, patchedExecutableName);
                     File.WriteAllBytes(patchedFilePath, byt);
                     Console.WriteLine("File has been saved to " + originalDirectory);
 
@@ -219,7 +210,7 @@ namespace StudioPatcher
                     if (shortcutChoice == "y" || shortcutChoice == "Y") {
                         Console.WriteLine("Creating shortcut on desktop...");
 
-                        CreateShortcut(shortcutName, desktopDirectory, patchedFilePath, iconPath);
+                        CreateShortcut(shortcutName, desktopDirectory, originalDirectory, patchedExecutableName, iconPath);
 
                         Console.WriteLine("Shortcut created.");
                     } else {
@@ -262,7 +253,8 @@ All operations complete! Press any key to end...");
                 client.DownloadFile(new Uri(lightThemeURL), lightThemeFilePath);
             }
 
-            Console.WriteLine("Latest resource files downloaded successfully!");
+            Console.WriteLine(@"Latest resource files downloaded successfully!
+");
 
             if (returnAfter) {
                 Console.WriteLine("Press any key to return to the main menu...");
